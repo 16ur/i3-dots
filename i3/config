@@ -1,0 +1,183 @@
+# i3 config file (v4)
+
+set $mod Mod4
+
+# Font for window titles. Will also be used by the bar unless a different font
+font pango:monospace 8
+
+exec --no-startup-id dex --autostart --environment i3
+
+exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
+
+exec --no-startup-id nm-applet
+
+# Use pactl to adjust volume in PulseAudio.
+set $refresh_i3status killall -SIGUSR1 i3status
+bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +10% && $refresh_i3status
+bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -10% && $refresh_i3status
+bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && $refresh_i3status
+bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle && $refresh_i3status
+bindsym XF86MonBrightnessUp exec --no-startup-id  brightnessctl s 10%+
+bindsym XF86MonBrightnessDown exec --no-startup-id brightnessctl s 10%-
+
+# Use Mouse+$mod to drag floating windows to their wanted position
+floating_modifier $mod
+
+# start a terminal
+bindsym $mod+Return exec alacritty
+
+# kill focused window
+bindcode $mod+Shift+24 kill
+
+# change focus
+bindsym $mod+j focus left
+bindsym $mod+k focus down
+bindsym $mod+l focus up
+bindsym $mod+m focus right
+
+# alternatively, you can use the cursor keys:
+bindsym $mod+Left focus left
+bindsym $mod+Down focus down
+bindsym $mod+Up focus up
+bindsym $mod+Right focus right
+
+# move focused window
+bindsym $mod+Shift+j move left
+bindsym $mod+Shift+k move down
+bindsym $mod+Shift+l move up
+bindsym $mod+Shift+m move right
+
+# alternatively, you can use the cursor keys:
+bindsym $mod+Shift+Left move left
+bindsym $mod+Shift+Down move down
+bindsym $mod+Shift+Up move up
+bindsym $mod+Shift+Right move right
+
+# New window at the bottom 
+bindcode $mod+55 split v
+
+# Fullscreen window
+bindcode $mod+41 fullscreen toggle
+
+# Change window tilling (mod e / mod z)
+bindsym $mod+s layout stacking
+bindcode $mod+25 layout tabbed
+bindcode $mod+26 layout toggle split
+
+# Toggle tiling 
+bindsym $mod+Shift+Return floating toggle
+
+# Focus the parent container
+bindsym $mod+q focus parent
+set $ws1 "1"
+set $ws2 "2"
+set $ws3 "3"
+set $ws4 "4"
+set $ws5 "5"
+set $ws6 "6"
+set $ws7 "7"
+set $ws8 "8"
+set $ws9 "9"
+set $ws10 "10"
+
+# Switch to workspace
+bindcode $mod+10 workspace number $ws1
+bindcode $mod+11 workspace number $ws2
+bindcode $mod+12 workspace number $ws3
+bindcode $mod+13 workspace number $ws4
+bindcode $mod+14 workspace number $ws5
+bindcode $mod+15 workspace number $ws6
+bindcode $mod+16 workspace number $ws7
+bindcode $mod+17 workspace number $ws8
+bindcode $mod+18 workspace number $ws9
+bindcode $mod+19 workspace number $ws10
+
+# Move a window to another workspace
+bindcode $mod+Shift+10 move container to workspace number $ws1
+bindcode $mod+Shift+11 move container to workspace number $ws2
+bindcode $mod+Shift+12 move container to workspace number $ws3
+bindcode $mod+Shift+13 move container to workspace number $ws4
+bindcode $mod+Shift+14 move container to workspace number $ws5
+bindcode $mod+Shift+15 move container to workspace number $ws6
+bindcode $mod+Shift+16 move container to workspace number $ws7
+bindcode $mod+Shift+17 move container to workspace number $ws8
+bindcode $mod+Shift+18 move container to workspace number $ws9
+bindcode $mod+Shift+19 move container to workspace number $ws10
+
+# Reload the configuration file
+bindcode $mod+Shift+54 reload
+
+# Restart i3 
+bindcode $mod+Shift+27 restart
+
+# exit i3 
+bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
+
+# Resize window
+bindsym $mod+r mode "resize"
+
+# Resize window (you can also use the mouse for that)
+mode "resize" {
+       bindsym j resize shrink width 10 px or 10 ppt
+        bindsym k resize grow height 10 px or 10 ppt
+        bindsym l resize shrink height 10 px or 10 ppt
+        bindsym m resize grow width 10 px or 10 ppt
+
+        # same bindings, but for the arrow keys
+        bindsym Left resize shrink width 10 px or 10 ppt
+        bindsym Down resize grow height 10 px or 10 ppt
+        bindsym Up resize shrink height 10 px or 10 ppt
+        bindsym Right resize grow width 10 px or 10 ppt
+
+        # back to normal: Enter or Escape or $mod+r
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+        bindsym $mod+r mode "default"
+}
+
+# Border size 
+for_window [class=".*"] border pixel 2
+default_border pixel 1 
+default_floating_border pixel 1
+
+# Colors
+# class                 border  bground text    indicator child_border
+client.focused          #2E3440 #151515 #FFFFFF #2E9EF4   #bdc6ce
+client.focused_inactive #333fff #FFFFFF #FFFFFF #484E50   #2E3440
+client.unfocused        #333333 #373737 #888888 #292D2E   #373737
+client.urgent           #2F343A #900000 #FFFFFF #900000   #900000
+client.placeholder      #000000 #0C0C0C #FFFFFF #000000   #0C0C0C
+client.background       #FFFFFFf
+
+# Gaps
+gaps inner 3
+gaps outer 2
+gaps top 20
+
+
+# NetworkManager 
+bindcode $mod+33 exec --no-startup-id networkmanager_dmenu
+
+# Rofi 
+bindsym Shift+Right exec --no-startup-id ~/.config/rofi/powermenu/type-4/powermenu.sh
+bindsym Print exec --no-startup-id ~/.config/rofi/applets/bin/screenshot.sh
+bindcode $mod+40 exec --no-startup-id ~/.config/rofi/launchers/type-3/launcher.sh
+bindcode $mod+65 exec --no-startup-id ~/.config/changeLayout/toggle_layout.sh
+bindcode $mod+21 exec --no-startup-id setxkbmap fr -variant lafayette33
+
+exec_always --no-startup-id setxkbmap fr -variant ergom
+# Picom 
+exec_always --no-startup-id picom
+
+# Polybar 
+exec_always --no-startup-id killall polybar
+exec_always --no-startup-id ~/.config/polybar/launch.sh &
+
+# Background
+exec_always --no-startup-id feh --bg-fill ~/Images/Wallpaper/pixel.png
+
+# Change layout to ErgoL
+
+exec_always --no-startup-id amixer set Headphone unmute &
+
+
